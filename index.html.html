@@ -1,0 +1,824 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#f7f0f7" />
+  <title>Grounded — support for moments that feel unreal</title>
+  <style>
+    :root {
+      --ink: #302c3b;
+      --muted: #716b7b;
+      --pink: #d99dbd;
+      --pink-dark: #9e5e83;
+      --lav: #e9e1f4;
+      --cream: #fffaf4;
+      --mint: #dceee7;
+      --line: #eee5ee;
+      --white: #fff;
+      --shadow: 0 18px 50px rgba(79, 53, 84, .09)
+    }
+
+    * {
+      box-sizing: border-box
+    }
+
+    html {
+      scroll-behavior: smooth
+    }
+
+    body {
+      margin: 0;
+      background: var(--cream);
+      color: var(--ink);
+      font: 16px/1.6 Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif
+    }
+
+    button,
+    input,
+    textarea {
+      font: inherit
+    }
+
+    button,
+    a {
+      -webkit-tap-highlight-color: transparent
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none
+    }
+
+    .wrap {
+      width: min(1120px, calc(100% - 40px));
+      margin: auto
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 22px 0
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      font-size: 1.18rem;
+      letter-spacing: -.04em
+    }
+
+    .brand-mark {
+      width: 36px;
+      height: 36px;
+      display: grid;
+      place-items: center;
+      border-radius: 13px;
+      background: linear-gradient(145deg, #efc6dc, #cbb9e8);
+      color: #573e60
+    }
+
+    .nav {
+      display: flex;
+      gap: 25px;
+      align-items: center;
+      color: var(--muted);
+      font-size: .92rem
+    }
+
+    .nav a:hover {
+      color: var(--pink-dark)
+    }
+
+    .nav-cta,
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 0;
+      border-radius: 999px;
+      padding: 12px 19px;
+      background: var(--ink);
+      color: white;
+      font-weight: 650;
+      cursor: pointer;
+      transition: transform .18s, opacity .18s
+    }
+
+    .nav-cta {
+      background: #ead7e7;
+      color: #61445f
+    }
+
+    .btn:hover,
+    .nav-cta:hover {
+      transform: translateY(-2px)
+    }
+
+    .btn.secondary {
+      background: white;
+      color: var(--ink);
+      border: 1px solid var(--line)
+    }
+
+    .btn.pink {
+      background: var(--pink-dark)
+    }
+
+    .hero {
+      padding: 54px 0 72px;
+      display: grid;
+      grid-template-columns: 1.03fr .97fr;
+      gap: 50px;
+      align-items: center
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: #f3e7f0;
+      color: #8a5b7a;
+      font-size: .82rem;
+      font-weight: 700
+    }
+
+    .dot {
+      width: 7px;
+      height: 7px;
+      background: #9dbeac;
+      border-radius: 50%
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin-top: 0
+    }
+
+    h1 {
+      font-size: clamp(2.8rem, 6vw, 5.1rem);
+      line-height: 1.02;
+      letter-spacing: -.065em;
+      margin: 20px 0
+    }
+
+    .gradient {
+      color: var(--pink-dark)
+    }
+
+    .hero-copy {
+      font-size: 1.12rem;
+      max-width: 500px;
+      color: var(--muted)
+    }
+
+    .actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin: 27px 0 18px
+    }
+
+    .fine {
+      font-size: .82rem;
+      color: var(--muted)
+    }
+
+    .art {
+      position: relative;
+      min-height: 420px;
+      border-radius: 42% 42% 28px 28px;
+      background: linear-gradient(155deg, #f0e4f4, #f7dfe8 53%, #e3eee8);
+      overflow: hidden;
+      box-shadow: var(--shadow)
+    }
+
+    .sun {
+      position: absolute;
+      width: 155px;
+      height: 155px;
+      border-radius: 50%;
+      background: #fff0c7;
+      top: 56px;
+      right: 72px;
+      box-shadow: 0 0 70px rgba(255, 240, 199, .6)
+    }
+
+    .hill {
+      position: absolute;
+      bottom: -10px;
+      width: 120%;
+      height: 56%;
+      border-radius: 50% 50% 0 0
+    }
+
+    .hill.one {
+      left: -25%;
+      background: #c5dcd3;
+      transform: rotate(-8deg)
+    }
+
+    .hill.two {
+      right: -35%;
+      bottom: -60px;
+      background: #a7c9bd;
+      transform: rotate(13deg)
+    }
+
+    .hill.three {
+      left: 6%;
+      bottom: -105px;
+      background: #8fb7aa;
+      transform: rotate(-3deg)
+    }
+
+    .cloud {
+      position: absolute;
+      width: 95px;
+      height: 25px;
+      border-radius: 50px;
+      background: rgba(255, 255, 255, .65);
+      top: 115px;
+      left: 55px
+    }
+
+    .cloud:before,
+    .cloud:after {
+      content: "";
+      position: absolute;
+      background: inherit;
+      border-radius: 50%;
+      bottom: 5px;
+      width: 38px;
+      height: 38px;
+      left: 15px
+    }
+
+    .cloud:after {
+      left: 43px;
+      width: 28px;
+      height: 28px
+    }
+
+    .quote-card {
+      position: absolute;
+      left: 22px;
+      bottom: 27px;
+      max-width: 245px;
+      padding: 18px 20px;
+      background: rgba(255, 255, 255, .83);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, .7);
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+      font-weight: 650
+    }
+
+    .quote-card small {
+      display: block;
+      font-weight: 500;
+      color: var(--muted);
+      margin-top: 5px
+    }
+
+    .section {
+      padding: 76px 0
+    }
+
+    .section.tint {
+      background: #f8f0f7
+    }
+
+    .section-head {
+      text-align: center;
+      max-width: 650px;
+      margin: 0 auto 35px
+    }
+
+    .section-head h2 {
+      font-size: clamp(2rem, 4vw, 3rem);
+      line-height: 1.1;
+      letter-spacing: -.045em;
+      margin: 12px 0
+    }
+
+    .section-head p {
+      color: var(--muted)
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px
+    }
+
+    .card {
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      padding: 25px;
+      box-shadow: 0 8px 25px rgba(79, 53, 84, .035)
+    }
+
+    .icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 16px;
+      display: grid;
+      place-items: center;
+      font-size: 1.35rem;
+      background: #f2e6f2;
+      margin-bottom: 18px
+    }
+
+    .card:nth-child(2) .icon {
+      background: #e3f0e9
+    }
+
+    .card:nth-child(3) .icon {
+      background: #fbecd7
+    }
+
+    .card h3 {
+      font-size: 1.15rem;
+      margin-bottom: 8px
+    }
+
+    .card p {
+      color: var(--muted);
+      font-size: .95rem;
+      margin-bottom: 18px
+    }
+
+    .text-link {
+      color: var(--pink-dark);
+      font-weight: 750
+    }
+
+    .tool-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 22px;
+      align-items: stretch
+    }
+
+    .tool {
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      padding: 28px;
+      box-shadow: var(--shadow)
+    }
+
+    .tool h3 {
+      font-size: 1.5rem;
+      letter-spacing: -.03em;
+      margin-bottom: 8px
+    }
+
+    .sub {
+      color: var(--muted)
+    }
+
+    .step-counter {
+      font-size: .8rem;
+      color: var(--pink-dark);
+      font-weight: 800;
+      letter-spacing: .1em;
+      text-transform: uppercase
+    }
+
+    .ground-prompt {
+      background: #fbf4fa;
+      border-radius: 20px;
+      padding: 24px;
+      margin: 22px 0;
+      min-height: 150px
+    }
+
+    .ground-prompt h4 {
+      font-size: 1.25rem;
+      margin: 0 0 8px
+    }
+
+    .ground-prompt p {
+      color: var(--muted);
+      margin: 0
+    }
+
+    .tool-controls {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap
+    }
+
+    .breath-area {
+      display: grid;
+      place-items: center;
+      min-height: 235px
+    }
+
+    .breath-orb {
+      width: 130px;
+      height: 130px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 30%, #fff, #e7d5f0 62%, #d7b5dc);
+      display: grid;
+      place-items: center;
+      color: #6b4a75;
+      font-weight: 800;
+      box-shadow: 0 0 0 15px #f8f1f9, 0 0 0 30px #fcf8fc;
+      transition: transform 4s ease-in-out
+    }
+
+    .breath-orb.expand {
+      transform: scale(1.22)
+    }
+
+    .breath-caption {
+      margin-top: 30px;
+      text-align: center;
+      font-weight: 700
+    }
+
+    .checkin {
+      display: grid;
+      grid-template-columns: .8fr 1.2fr;
+      gap: 28px;
+      align-items: start
+    }
+
+    .checkin-intro h2 {
+      font-size: 2.5rem;
+      letter-spacing: -.05em;
+      line-height: 1.08
+    }
+
+    .checkin-intro p {
+      color: var(--muted)
+    }
+
+    .form-card {
+      padding: 28px;
+      border-radius: 26px;
+      background: white;
+      border: 1px solid var(--line)
+    }
+
+    .moods {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 9px;
+      margin: 12px 0 22px
+    }
+
+    .mood {
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 16px;
+      padding: 12px 4px;
+      cursor: pointer;
+      text-align: center;
+      color: var(--muted)
+    }
+
+    .mood span {
+      display: block;
+      font-size: 1.5rem
+    }
+
+    .mood.active {
+      background: #f6e9f3;
+      border-color: #d9b2cf;
+      color: #754b6d
+    }
+
+    .field {
+      display: block;
+      font-weight: 700;
+      font-size: .9rem;
+      margin: 17px 0 8px
+    }
+
+    textarea,
+    input {
+      width: 100%;
+      border: 1px solid #e7dfe8;
+      border-radius: 14px;
+      padding: 12px 14px;
+      background: #fffdfd;
+      color: var(--ink);
+      outline: none
+    }
+
+    textarea:focus,
+    input:focus {
+      border-color: #c58bb1;
+      box-shadow: 0 0 0 3px #f4e4ef
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 95px
+    }
+
+    .saved-note {
+      margin-top: 12px;
+      color: #477663;
+      font-size: .9rem;
+      display: none
+    }
+
+    .resources {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px
+    }
+
+    .resource {
+      padding: 24px;
+      border-radius: 22px;
+      background: white;
+      border: 1px solid var(--line)
+    }
+
+    .resource p {
+      color: var(--muted);
+      margin-bottom: 0
+    }
+
+    .notice {
+      margin-top: 26px;
+      padding: 18px 20px;
+      border-radius: 18px;
+      background: #f4eaf1;
+      color: #685268;
+      font-size: .92rem
+    }
+
+    .footer {
+      padding: 35px 0 45px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: .9rem
+    }
+
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap
+    }
+
+    .mobile-menu {
+      display: none
+    }
+
+    @media(max-width:800px) {
+      .nav {
+        gap: 12px
+      }
+
+      .nav a:not(.nav-cta) {
+        display: none
+      }
+
+      .hero {
+        grid-template-columns: 1fr;
+        gap: 28px;
+        padding-top: 30px
+      }
+
+      .art {
+        min-height: 340px
+      }
+
+      .cards {
+        grid-template-columns: 1fr
+      }
+
+      .tool-grid,
+      .checkin {
+        grid-template-columns: 1fr
+      }
+
+      .section {
+        padding: 55px 0
+      }
+
+      .resources {
+        grid-template-columns: 1fr
+      }
+
+      .quote-card {
+        left: 16px;
+        bottom: 18px
+      }
+
+      .sun {
+        right: 40px
+      }
+
+      .topbar {
+        padding: 16px 0
+      }
+
+      h1 {
+        font-size: 3.4rem
+      }
+    }
+
+    @media(prefers-reduced-motion:reduce) {
+      * {
+        scroll-behavior: auto !important;
+        transition: none !important
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="wrap topbar">
+    <a class="brand" href="#home" aria-label="Grounded home"><span class="brand-mark">✿</span> grounded</a>
+    <nav class="nav" aria-label="Main navigation"><a href="#understand">Understand</a><a href="#tools">Try an
+        exercise</a><a href="#checkin">Daily check-in</a><a class="nav-cta" href="#tools">Find a little calm ↗</a></nav>
+  </header>
+  <main>
+    <section class="wrap hero" id="home">
+      <div><span class="eyebrow"><span class="dot"></span> A softer place to land</span>
+        <h1>When the world feels unreal, <span class="gradient">start here.</span></h1>
+        <p class="hero-copy">Gentle tools and reassurance for moments when you feel disconnected, distant, or not quite
+          present. You don't have to figure everything out right now.</p>
+        <div class="actions"><a class="btn pink" href="#tools">Try a grounding exercise <span
+              aria-hidden="true">→</span></a><a class="btn secondary" href="#understand">Understand what I'm feeling</a>
+        </div>
+        <p class="fine">Take what helps. Leave what doesn't. Go at your own pace.</p>
+      </div>
+      <div class="art" role="img"
+        aria-label="Soft pastel hills beneath a warm sun, representing a gentle return to the present">
+        <div class="sun"></div>
+        <div class="cloud"></div>
+        <div class="hill one"></div>
+        <div class="hill two"></div>
+        <div class="hill three"></div>
+        <div class="quote-card">“I can feel disconnected and still be safe in this moment.”<small>A gentle reminder for
+            right now</small></div>
+      </div>
+    </section>
+    <section class="section tint" id="understand">
+      <div class="wrap">
+        <div class="section-head"><span class="eyebrow">A little understanding</span>
+          <h2>You are not the only one who feels this way.</h2>
+          <p>Derealization can make your surroundings feel dreamlike, distant, foggy, or unfamiliar. The sensation can
+            be frightening, especially when you don't know why it's happening.</p>
+        </div>
+        <div class="cards">
+          <article class="card">
+            <div class="icon">☁️</div>
+            <h3>It can feel strange</h3>
+            <p>Some people describe the world as hazy, flat, distant, or like they're watching a movie. The feeling
+              itself isn't proof that reality has changed.</p><a class="text-link" href="#resources">Learn more →</a>
+          </article>
+          <article class="card">
+            <div class="icon">🌿</div>
+            <h3>You don't have to fight it</h3>
+            <p>Trying to force the sensation away or constantly checking whether you feel normal can add pressure.
+              Gently return attention to an ordinary activity if that feels manageable.</p><a class="text-link"
+              href="#tools">Try a grounding tool →</a>
+          </article>
+          <article class="card">
+            <div class="icon">🫶</div>
+            <h3>Support is allowed</h3>
+            <p>Stress, anxiety, lack of sleep, and other factors can contribute. If this keeps happening or affects
+              daily life, a qualified health professional can help you explore it.</p><a class="text-link"
+              href="#resources">Find support →</a>
+          </article>
+        </div>
+      </div>
+    </section>
+    <section class="section" id="tools">
+      <div class="wrap">
+        <div class="section-head"><span class="eyebrow">Tools for right now</span>
+          <h2>You only need to do the next small thing.</h2>
+          <p>Choose one exercise. If focusing on your body or breathing makes you feel worse, stop and try an external
+            grounding activity instead.</p>
+        </div>
+        <div class="tool-grid">
+          <article class="tool"><span class="step-counter" id="stepCounter">STEP 1 OF 5</span>
+            <h3>Come back to your surroundings</h3>
+            <p class="sub">A gentle 5–4–3–2–1 sensory exercise. There is no perfect way to do it.</p>
+            <div class="ground-prompt" aria-live="polite">
+              <h4 id="groundTitle">Notice 5 things you can see</h4>
+              <p id="groundText">Let your eyes rest on ordinary objects around you. Silently name five colours, shapes,
+                or details. No need to rush.</p>
+            </div>
+            <div class="tool-controls"><button class="btn secondary" id="groundBack" disabled>← Previous</button><button
+                class="btn pink" id="groundNext">Next step →</button></div>
+            <p class="fine" style="margin:16px 0 0">You can keep your eyes open and stay seated. Stop if this exercise
+              feels uncomfortable.</p>
+          </article>
+          <article class="tool"><span class="step-counter">OPTIONAL BREATHING PAUSE</span>
+            <h3>Let your breath be natural</h3>
+            <p class="sub">No need for deep breaths. Try a comfortable, unforced rhythm—or skip this if breath focus
+              feels uncomfortable.</p>
+            <div class="breath-area">
+              <div class="breath-orb" id="breathOrb">Ready</div>
+            </div>
+            <div class="breath-caption" id="breathCaption" aria-live="polite">Try a slow, comfortable breath.</div>
+            <div class="tool-controls" style="justify-content:center;margin-top:18px"><button class="btn pink"
+                id="breathBtn">Start 1-minute pause</button><button class="btn secondary" id="breathStop"
+                disabled>Stop</button></div>
+          </article>
+        </div>
+      </div>
+    </section>
+    <section class="section tint" id="checkin">
+      <div class="wrap checkin">
+        <div class="checkin-intro"><span class="eyebrow">No judgement, just noticing</span>
+          <h2>A check-in with yourself.</h2>
+          <p>You don't need to explain everything. Notice how you feel and what might help you through the next hour.
+          </p>
+          <p class="fine">This check-in stays in this page for now and is not sent anywhere. Refreshing the page clears
+            it.</p>
+        </div>
+        <form class="form-card" id="checkinForm"><label class="field">How are things feeling right now?</label>
+          <div class="moods" role="group" aria-label="Choose a mood"><button type="button" class="mood"
+              data-mood="overwhelmed"><span>🌧️</span><small>Overwhelmed</small></button><button type="button"
+              class="mood" data-mood="anxious"><span>🌫️</span><small>Anxious</small></button><button type="button"
+              class="mood" data-mood="numb"><span>🫧</span><small>Numb</small></button><button type="button"
+              class="mood" data-mood="okay"><span>🌤️</span><small>Okay</small></button><button type="button"
+              class="mood" data-mood="calm"><span>🌷</span><small>Calmer</small></button></div><label class="field"
+            for="trigger">Anything that might be affecting you? (optional)</label><input id="trigger" name="trigger"
+            placeholder="e.g. poor sleep, stress, a busy day" /><label class="field" for="nextStep">One kind thing I can
+            do next (optional)</label><textarea id="nextStep" name="nextStep"
+            placeholder="Drink some water, step outside, message someone I trust…"></textarea><button class="btn pink"
+            type="submit" style="margin-top:18px">Save my check-in on this page</button>
+          <p class="saved-note" id="savedNote" role="status">Your check-in is here for this session. Take it one moment
+            at a time. 🌷</p>
+        </form>
+      </div>
+    </section>
+    <section class="section" id="resources">
+      <div class="wrap">
+        <div class="section-head"><span class="eyebrow">Support beyond this page</span>
+          <h2>You deserve support that meets you where you are.</h2>
+          <p>Grounding tools may help you cope, but you don't have to manage persistent or distressing symptoms alone.
+          </p>
+        </div>
+        <div class="resources">
+          <article class="resource">
+            <h3>Talk with a qualified professional</h3>
+            <p>If these feelings are frequent, new, worsening, or interfering with sleep, school, work, or
+              relationships, consider speaking with a doctor or licensed mental health professional. They can assess
+              possible causes and discuss appropriate support.</p>
+          </article>
+          <article class="resource">
+            <h3>Tell someone you trust</h3>
+            <p>You could say: “I've been feeling disconnected and it scares me sometimes. I don't need you to fix it;
+              could you sit with me or check in on me?”</p>
+          </article>
+          <article class="resource">
+            <h3>Care for the basics</h3>
+            <p>Where possible, keep a regular sleep routine, eat and drink regularly, take breaks from overwhelming
+              stimulation, and avoid using alcohol or recreational drugs to manage symptoms.</p>
+          </article>
+          <article class="resource">
+            <h3>If you feel unsafe</h3>
+            <p>If you might hurt yourself, cannot keep yourself safe, or have a sudden severe change in awareness, seek
+              urgent local medical help or contact emergency services. Ask someone trusted to stay with you.</p>
+          </article>
+        </div>
+        <div class="notice"><strong>A gentle reminder:</strong> This website is for education and self-support, not
+          diagnosis or treatment. Derealization can have different causes; a health professional can help you understand
+          what's happening for you. You can stop any exercise that increases distress.</div>
+      </div>
+    </section>
+  </main>
+  <footer class="footer">
+    <div class="wrap footer-inner"><a class="brand" href="#home"><span class="brand-mark">✿</span>
+        grounded</a><span>Made with care for the moments that feel hard.</span><span>Not a substitute for professional
+        care.</span></div>
+  </footer>
+  <script>
+    const groundSteps = [
+      { title: 'Notice 5 things you can see', text: 'Let your eyes rest on ordinary objects around you. Silently name five colours, shapes, or details. No need to rush.' },
+      { title: 'Notice 4 things you can feel', text: 'If comfortable, notice the chair supporting you, your feet inside your shoes, or the texture of a nearby object. You can skip body sensations if they feel unsettling.' },
+      { title: 'Notice 3 things you can hear', text: 'Listen for sounds near or far away—a fan, traffic, birds, or a voice. You do not have to identify every sound.' },
+      { title: 'Notice 2 things you can smell', text: 'If there are smells around you, notice them gently. If not, skip this step or name two familiar scents you like.' },
+      { title: 'Notice 1 thing you can taste', text: 'Notice a taste in your mouth or take a sip of water if you have some. Then choose one ordinary next action, like standing up or texting someone.' }
+    ]; let groundIndex = 0; const $ = id => document.getElementById(id); function renderGround() { const s = groundSteps[groundIndex]; $('stepCounter').textContent = `STEP ${groundIndex + 1} OF ${groundSteps.length}`; $('groundTitle').textContent = s.title; $('groundText').textContent = s.text; $('groundBack').disabled = groundIndex === 0; $('groundNext').textContent = groundIndex === groundSteps.length - 1 ? 'Start again ↻' : 'Next step →' } $('groundNext').addEventListener('click', () => { groundIndex = (groundIndex + 1) % groundSteps.length; renderGround() }); $('groundBack').addEventListener('click', () => { groundIndex = Math.max(0, groundIndex - 1); renderGround() });
+    let breathTimer = null, breathPhase = 0; const phases = [{ label: 'Breathe in gently', duration: 4000, expand: true }, { label: 'Breathe out slowly', duration: 5000, expand: false }]; function breathTick() { const p = phases[breathPhase]; $('breathCaption').textContent = p.label; $('breathOrb').textContent = breathPhase === 0 ? 'In' : 'Out'; $('breathOrb').classList.toggle('expand', p.expand); breathTimer = setTimeout(() => { breathPhase = 1 - breathPhase; breathTick() }, p.duration) } $('breathBtn').addEventListener('click', () => { if (breathTimer) return; breathPhase = 0; $('breathBtn').disabled = true; $('breathStop').disabled = false; breathTick() }); function stopBreath() { if (breathTimer) clearTimeout(breathTimer); breathTimer = null; $('breathOrb').classList.remove('expand'); $('breathOrb').textContent = 'Ready'; $('breathCaption').textContent = 'Try a slow, comfortable breath.'; $('breathBtn').disabled = false; $('breathStop').disabled = true } $('breathStop').addEventListener('click', stopBreath);
+    let selectedMood = ''; document.querySelectorAll('.mood').forEach(btn => btn.addEventListener('click', () => { selectedMood = btn.dataset.mood; document.querySelectorAll('.mood').forEach(b => b.classList.toggle('active', b === btn)); $('savedNote').style.display = 'none' })); $('checkinForm').addEventListener('submit', e => { e.preventDefault(); if (!selectedMood) { $('savedNote').textContent = 'Choose the mood that feels closest—or simply leave this check-in for now.'; $('savedNote').style.display = 'block'; return } $('savedNote').textContent = `Check-in saved for this session: ${selectedMood}. You took a moment to notice how you're doing. 🌷`; $('savedNote').style.display = 'block' });
+  </script>
+</body>
+
+</html>
